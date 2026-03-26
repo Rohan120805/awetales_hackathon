@@ -1,10 +1,11 @@
 
-# AweTales Hackathon (Notebooks)
+# AweTales Hackathon (Notebooks + Web UI)
 
-This repo contains two working notebooks:
+This repo contains two working notebooks and a web-based UI:
 
 - `project.ipynb`: English speech-to-text (Whisper) + translation to Telugu/Hindi (NLLB).
 - `tts.ipynb`: Text-to-speech for Telugu/Hindi (Google Cloud TTS or free gTTS).
+- **`app.py`**: Interactive web UI that combines all features (recommended for ease of use).
 
 > Note: `voice_cloning_pipeline.ipynb` is intentionally **not** documented here (it’s experimental and not working reliably).
 
@@ -152,6 +153,57 @@ jupyter notebook
 
 Open `tts.ipynb` and run cells **top-to-bottom** (some example cells call helper functions that are defined later in the notebook).
 Generated audio files are saved under `audio_files/`.
+
+---
+
+## 6) Run the Web UI (Gradio)
+
+For an easier, interactive experience, we provide a web-based UI that combines all features (transcription, translation, and TTS) in one place.
+
+### Install dependencies
+
+If you haven't already installed the dependencies from steps 2 and 4, use the requirements file:
+
+```bat
+pip install -r requirements.txt
+```
+
+Or install PyTorch separately (CPU version):
+
+```bat
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+pip install -r requirements.txt
+```
+
+### Setup (optional for TTS)
+
+For Text-to-Speech functionality, create a `.env` file in the project root:
+
+```env
+GOOGLE_API_KEY=your_google_cloud_api_key
+```
+
+### Launch the UI
+
+```bat
+python app.py
+```
+
+This will:
+1. Load the Whisper and NLLB translation models (may take a minute on first run)
+2. Start a local web server at `http://127.0.0.1:7860`
+3. Open your browser to access the UI
+
+### Using the UI
+
+1. **Upload audio**: Click to upload an English audio file or use your microphone
+2. **Select language**: Choose Telugu or Hindi as the target language
+3. **Enable TTS** (optional): Check the box to generate audio output
+4. **Process**: Click "Process Audio" and wait for results
+5. The UI will show:
+   - English transcription
+   - Translated text
+   - Audio player with generated speech (if TTS is enabled)
 
 ---
 

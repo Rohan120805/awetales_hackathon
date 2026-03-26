@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AweTales Audio Translation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AweTales Audio Translation</h1>
+            <p class="subtitle">Transcribe English audio, translate to Telugu or Hindi, and generate speech output</p>
+        </header>
+
+        <main>
+            <div class="grid">
+                <section class="input-section">
+                    <h2>Input</h2>
+
+                    <div class="form-group">
+                        <label for="audio-input">Upload English Audio</label>
+                        <div class="file-upload" id="drop-zone">
+                            <input type="file" id="audio-input" accept="audio/*" hidden>
+                            <div class="upload-content">
+                                <span class="upload-icon">&#128266;</span>
+                                <p>Drag & drop audio file or <span class="browse-link">browse</span></p>
+                                <p class="file-types">Supports WAV, MP3, M4A, etc.</p>
+                            </div>
+                            <div class="file-selected" id="file-selected" hidden>
+                                <span class="file-name" id="file-name"></span>
+                                <button type="button" class="remove-file" id="remove-file">&times;</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="language-select">Target Language</label>
+                        <select id="language-select">
+                            <option value="Telugu">Telugu</option>
+                            <option value="Hindi">Hindi</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="tts-checkbox" checked>
+                        <label for="tts-checkbox">Generate Text-to-Speech output</label>
+                        <p class="hint">Requires Google Gemini API key in .env file</p>
+                    </div>
+
+                    <button type="button" id="process-btn" class="btn btn-primary" disabled>
+                        Process Audio
+                    </button>
+
+                    <div id="progress-container" class="progress-container" hidden>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <p class="progress-text" id="progress-text">Processing...</p>
+                    </div>
+                </section>
+
+                <section class="output-section">
+                    <h2>Output</h2>
+
+                    <div class="form-group">
+                        <label>English Transcription</label>
+                        <textarea id="english-output" readonly placeholder="English transcription will appear here..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Translated Text</label>
+                        <textarea id="translated-output" readonly placeholder="Translated text will appear here..."></textarea>
+                    </div>
+
+                    <div class="form-group" id="audio-output-group" hidden>
+                        <label>Generated Speech</label>
+                        <audio id="audio-output" controls></audio>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Status</label>
+                        <div id="status-output" class="status-box"></div>
+                    </div>
+
+                    <div class="transcript-actions">
+                        <div class="form-group">
+                            <label for="transcript-file">Upload Transcript (.txt)</label>
+                            <input type="file" id="transcript-file" accept=".txt" class="file-input">
+                        </div>
+                        <button type="button" id="download-transcript-btn" class="btn btn-secondary" disabled>
+                            Download Transcript
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <footer>
+            <div class="info-section">
+                <h3>Requirements</h3>
+                <ul>
+                    <li><strong>FFmpeg</strong>: Required for audio processing</li>
+                    <li><strong>Google Gemini API Key</strong>: Required for TTS (add to .env file)</li>
+                </ul>
+            </div>
+            <div class="info-section">
+                <h3>About</h3>
+                <ul>
+                    <li><strong>Speech-to-Text</strong>: Faster-Whisper (small model)</li>
+                    <li><strong>Translation</strong>: Google Translate API</li>
+                    <li><strong>Text-to-Speech</strong>: Google Gemini TTS</li>
+                </ul>
+            </div>
+            <p class="copyright">AweTales Hackathon Project</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

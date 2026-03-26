@@ -1,0 +1,22 @@
+# Core ML dependencies
+torch>=2.0.0
+faster-whisper>=1.0.0
+
+# Translation
+deep-translator>=1.11.0
+
+# Audio processing
+pydub>=0.25.1
+
+# Google Gemini API for TTS
+google-genai>=1.0.0
+
+# Web framework
+flask>=3.0.0
+werkzeug>=3.0.0
+
+# Environment variables
+python-dotenv>=1.0.0
+
+# Additional utilities
+numpy>=1.24.0
