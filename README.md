@@ -11,6 +11,75 @@ This repo contains two working notebooks and a web-based UI:
 
 ---
 
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              USER INTERFACE                                  │
+│                        (Browser - localhost:7860)                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  templates/index.html    │  static/css/style.css  │  static/js/main.js      │
+│  (HTML Structure)        │  (Styling)             │  (Client Logic)         │
+└────────────────────────────────────┬────────────────────────────────────────┘
+                                     │ HTTP/REST API
+                                     ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           FLASK BACKEND (app.py)                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌──────────────────┐   ┌──────────────────┐   ┌──────────────────┐        │
+│  │   /api/process   │   │ /api/download/   │   │  /api/audio/     │        │
+│  │   (POST)         │   │ transcript       │   │  <filename>      │        │
+│  │                  │   │ (POST)           │   │  (GET)           │        │
+│  └────────┬─────────┘   └──────────────────┘   └──────────────────┘        │
+│           │                                                                  │
+│           ▼                                                                  │
+│  ┌─────────────────────────────────────────────────────────────────┐       │
+│  │                    PROCESSING PIPELINE                           │       │
+│  │                                                                  │       │
+│  │   ┌─────────────┐    ┌─────────────┐    ┌─────────────┐        │       │
+│  │   │ TRANSCRIBE  │───▶│  TRANSLATE  │───▶│     TTS     │        │       │
+│  │   │             │    │             │    │             │        │       │
+│  │   │ faster-     │    │ Google      │    │ Google      │        │       │
+│  │   │ whisper     │    │ Translate   │    │ Gemini API  │        │       │
+│  │   │ (small)     │    │ (deep-      │    │ (TTS model) │        │       │
+│  │   │             │    │ translator) │    │             │        │       │
+│  │   └─────────────┘    └─────────────┘    └─────────────┘        │       │
+│  │                                                                  │       │
+│  └─────────────────────────────────────────────────────────────────┘       │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                     │
+                                     ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              FILE STORAGE                                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  uploads/          │  audio_files/                                          │
+│  (Temp audio       │  (Generated TTS audio & transcripts)                   │
+│   uploads)         │                                                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Data Flow
+
+1. **Audio Input** → User uploads English audio file via web UI
+2. **Speech-to-Text** → faster-whisper transcribes audio to English text
+3. **Translation** → Google Translate API converts English → Telugu/Hindi
+4. **Text-to-Speech** → Google Gemini API generates native language audio
+5. **Output** → User receives transcription, translation, and audio playback
+
+### Key Components
+
+| Component | Technology | Purpose |
+|-----------|------------|---------|
+| Web Server | Flask | REST API & static file serving |
+| Frontend | HTML/CSS/JS | User interface |
+| STT Engine | faster-whisper | English speech recognition |
+| Translation | deep-translator | Multi-language translation |
+| TTS Engine | Google Gemini API | Speech synthesis |
+
+---
+
 ## Prerequisites (Windows)
 
 - Python 3.10+ recommended
